@@ -1,0 +1,45 @@
+package ${t.packageName};
+import java.io.Serializable;
+<#if 0<t.dateColNum >
+import java.util.Date;
+</#if>
+<#if 0<t.decimalColNum >
+import java.math.BigDecimal;
+</#if>
+
+
+/**
+ * ${tabNameFormat(t.tableName)}表
+ * 
+ * @author system
+ * 
+ */
+
+public class ${t.className}  implements Serializable{
+
+	<#list t.allCols as column>
+	private ${column.javaType} ${column.propertiesName};
+	</#list>
+
+	public ${t.className}() {
+		super();
+		clear();
+	}
+
+	public void clear() {
+		<#list t.allCols as column>
+		${column.propertiesName} = null;
+		</#list>
+	}
+	<#list t.allCols as column>
+
+
+	public ${column.javaType} get${first2Upper(column.propertiesName)}() {
+		return ${column.propertiesName};
+	}
+
+	public void set${first2Upper(column.propertiesName)}(${column.javaType} ${column.propertiesName}) {
+		this.${column.propertiesName} = ${column.propertiesName};
+	}
+	</#list>
+}
