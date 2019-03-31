@@ -13,7 +13,7 @@
     </sql>
 
     <!-- 根据id实现条件查询-->
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="${idbeanModel.javaType}">
         select
         <include refid="Base_Column_List"/>
         from ${table}
@@ -21,13 +21,13 @@
     </select>
 
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <delete id="deleteByPrimaryKey" parameterType="${idbeanModel.javaType}">
         delete from ${table}  where ${idbeanModel.cloumName} =  ${r"#{"}${idbeanModel.javaName}${r"}"}
     </delete>
 
 
     <insert id="insert" parameterType="${pack}">
-        <selectKey resultType="${idbeanModel.cloumType}" keyProperty="${idbeanModel.javaName}" order="AFTER">
+        <selectKey resultType="${idbeanModel.javaType}" keyProperty="${idbeanModel.javaName}" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into ${table} ( ${idbeanModel.cloumName},
@@ -50,7 +50,7 @@
             ${idbeanModel.cloumName},
             </if>
 	   <#list fieldList as var>
-            <if test="${var.javaName} != null">
+            <if test="${var.javaName} != null <#if var.javaType != "Date" > AND ${var.javaName} != ''</#if>">
                 ${var.cloumName},
             </if>
        </#list>
@@ -60,7 +60,7 @@
             ${r"#{"}${idbeanModel.javaName}${r"}"},
             </if>
              <#list fieldList as var>
-                 <if test="${var.javaName} != null">
+                 <if test="${var.javaName} != null  <#if var.javaType != "Date" > AND ${var.javaName} != ''</#if>">
                      ${r"#{"}${var.javaName},jdbcType=${var.cloumType}${r"}"},
                  </if>
              </#list>
@@ -71,11 +71,11 @@
     <update id="updateByPrimaryKeySelective" parameterType="${pack}">
         update ${table}
         <set>
-            <if test="${idbeanModel.javaName} != null">
+            <if test="${idbeanModel.javaName} != null ">
             ${id} =  ${r"#{"}${idbeanModel.cloumName}${r"}"},
             </if>
            <#list fieldList as var>
-               <if test="${var.javaName} != null">
+               <if test="${var.javaName} != null <#if var.javaType != "Date" > AND ${var.javaName} != ''</#if>">
                    ${var.cloumName} = ${r"#{"}${var.javaName},jdbcType=${var.cloumType}${r"}"},
                </if>
            </#list>
@@ -101,7 +101,7 @@
                   ${idbeanModel.cloumName} = ${r"#{"}${idbeanModel.javaName},jdbcType=${idbeanModel.cloumType}${r"}"}
             </if>
            <#list fieldList as var>
-               <if test="${var.javaName} != null">
+               <if test="${var.javaName} != null  <#if var.javaType != "Date" > AND ${var.javaName} != ''</#if>">
                    AND ${var.cloumName} = ${r"#{"}${var.javaName},jdbcType=${var.cloumType}${r"}"}
                </if>
            </#list>
@@ -114,11 +114,11 @@
         <include refid="Base_Column_List"/>
         from  ${table}
         <where>
-            <if test="${idbeanModel.javaName} != null">
+            <if test="${idbeanModel.javaName} != null ">
             ${idbeanModel.cloumName} = ${r"#{"}${idbeanModel.javaName},jdbcType=${idbeanModel.cloumType}${r"}"}
             </if>
            <#list fieldList as var>
-               <if test="${var.javaName} != null">
+               <if test="${var.javaName} != null <#if var.javaType != "Date" > AND ${var.javaName} != ''</#if>">
                    AND    ${var.cloumName} = ${r"#{"}${var.javaName},jdbcType=${var.cloumType}${r"}"}
                </if>
            </#list>

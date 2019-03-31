@@ -404,9 +404,13 @@ public class JdbcTools {
         if (StringHelper.isNotEmpty(entityPath)) {
            // String replace1 = entityPath.replace("\\", ".");
             String[] split = entityPath.split("java"+".");
-            if(null != split && 0<split.length){
+            if(null != split && 1<split.length){
                   replace = split[1].replace("\\/", ".");
                 return replace;
+            }else
+            {
+               System.out.println("目录不符合规范，请配置目录为java的文件目录");
+                System.exit(-1);
             }
         }
 
