@@ -9,11 +9,11 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-         ${idbeanModel.cloumName},<#list fieldList as var> ${var.cloumName},<#if !var_has_next> ${var.cloumName}</#if> </#list>
+    ${idbeanModel.cloumName},<#list fieldList as var> <#if var_has_next>${var.cloumName}, <#else>${var.cloumName} </#if> </#list>
     </sql>
 
     <!-- 根据id实现条件查询-->
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="${idbeanModel.javaType}">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="<#if idbeanModel.javaType == "Integer" >java.lang.Integer<#elseif javaType == "Long">java.lang.Long <#elseif javaType == "String">java.lang.String </#if>">
         select
         <include refid="Base_Column_List"/>
         from ${table}
@@ -21,13 +21,13 @@
     </select>
 
 
-    <delete id="deleteByPrimaryKey" parameterType="${idbeanModel.javaType}">
+    <delete id="deleteByPrimaryKey" parameterType="<#if idbeanModel.javaType == "Integer" >java.lang.Integer<#elseif javaType == "Long">java.lang.Long <#elseif javaType == "String">java.lang.String </#if>">
         delete from ${table}  where ${idbeanModel.cloumName} =  ${r"#{"}${idbeanModel.javaName}${r"}"}
     </delete>
 
 
     <insert id="insert" parameterType="${pack}">
-        <selectKey resultType="${idbeanModel.javaType}" keyProperty="${idbeanModel.javaName}" order="AFTER">
+        <selectKey resultType="<#if idbeanModel.javaType == "Integer" >java.lang.Integer<#elseif javaType == "Long">java.lang.Long <#elseif javaType == "String">java.lang.String </#if>" keyProperty="${idbeanModel.javaName}" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into ${table} ( ${idbeanModel.cloumName},
@@ -41,7 +41,7 @@
 
 
     <insert id="insertSelective" parameterType="${pack}">
-        <selectKey resultType="${idbeanModel.javaType}" keyProperty="${idbeanModel.javaName}" order="AFTER">
+        <selectKey resultType="<#if idbeanModel.javaType == "Integer" >java.lang.Integer<#elseif javaType == "Long">java.lang.Long <#elseif javaType == "String">java.lang.String </#if>" keyProperty="${idbeanModel.javaName}" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into  ${table}
