@@ -14,6 +14,7 @@ import jdbc.freemarker.CreateCodeUtil;
 import bean.MapBean;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import jdbc.freemarker.ReflectBean;
 import pubUtils.template.ColumnInfo;
 import pubUtils.template.First2Lower;
 import pubUtils.template.First2Upper;
@@ -36,18 +37,19 @@ public class JdbcTools {
     private static String       DECIMAL_TYPE      = "BigDecimal";
 
 
-    /*public static void main(String[] args) {
-        String mapperJavaPath =" C:\\Users\\Administrator\\Desktop\\test1\\src\\main\\java\\test";
+    public static void main(String[] args) {
+        String mapperJavaPath ="C:\\Users\\Administrator\\Desktop\\pub-dao\\src\\main\\java\\test";
         String mapperXmlPath="E:\\app\\";
         String entityPath="E:\\app\\";
-        String tables = "a_test";
+        String tables = "btest";
         String dbDriver= "com.mysql.jdbc.Driver";
         String url = "jdbc:mysql://localhost:3306/shoppingmall?useUnicode=true&characterEncoding=UTF-8";
         String user="root";
         String password = "123";
         String owner ="root";
+
          create(tables,dbDriver,url,user,password,owner,mapperJavaPath,mapperJavaPath,mapperJavaPath);
-    }*/
+    }
 
     public static void create(String tables ,String dbDriver,String url,
                               String user,String password ,String  owner,String mapperPath,String mapperXmlPath,String entityPath ) {
@@ -168,7 +170,7 @@ public class JdbcTools {
             while (rs.next()) {
             	ColumnInfo col = new ColumnInfo();
                 col.setColumnName(rs.getString("column_name").toUpperCase());
-                col.setPropertiesName(StringHelper.columnName2propertyName(col.getColumnName()));
+                col.setPropertiesName(ReflectBean.getClassName(rs.getString("column_name")));
                 col.setDataType(rs.getString("type_name").toUpperCase());
                 col.setColType("COL");//普通字段
                 col.setComment(rs.getString("REMARKS"));
